@@ -24,7 +24,7 @@ import UIKit
 
 @IBDesignable
 class IceCreamView: UIView {
-
+  
   // MARK: - Instance Properties
   fileprivate let coneOuterColor = RGB(184, 104, 50)
   fileprivate let coneInnerColor = RGB(209, 160, 102)

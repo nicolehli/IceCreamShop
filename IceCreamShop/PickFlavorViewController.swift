@@ -21,6 +21,7 @@
  */
 
 import UIKit
+import Alamofire
 
 public class PickFlavorViewController: UIViewController {
 
@@ -43,6 +44,28 @@ public class PickFlavorViewController: UIViewController {
 
   fileprivate func loadFlavors() {
     // TO-DO: Implement this
+    
+    // download plist of ice cream flavors
+    let url = "https://www.raywenderlich.com/downloads/Flavors.plist"
+    Alamofire.request(url, method: .get, encoding: PropertyListEncoding(format: .xml, options: 0))
+      .responsePropertyList {
+          [weak self] response in
+      
+          guard let strongSelf = self else { return }
+        
+          // verify response
+          guard response.result.isSuccess,
+            let dictionaryArray = response.result.value as? [[String: String]] else {
+              return
+          }
+        
+        // Set to an array of Flavor objects
+        strongSelf.flavors = strongSelf.flavorFactory.flavors(from: dictionaryArray)
+        
+        // Reload view
+        strongSelf.collectionView.reloadData()
+        strongSelf.selectFirstFlavor()
+    }
   }
 
   fileprivate func selectFirstFlavor() {
