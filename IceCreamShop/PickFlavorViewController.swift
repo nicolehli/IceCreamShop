@@ -22,6 +22,7 @@
 
 import UIKit
 import Alamofire
+import MBProgressHUD
 
 public class PickFlavorViewController: UIViewController {
 
@@ -45,6 +46,9 @@ public class PickFlavorViewController: UIViewController {
   fileprivate func loadFlavors() {
     // TO-DO: Implement this
     
+    // Show HUD while GET request downloads
+    showLoadingHUD()
+    
     // download plist of ice cream flavors
     let url = "https://www.raywenderlich.com/downloads/Flavors.plist"
     Alamofire.request(url, method: .get, encoding: PropertyListEncoding(format: .xml, options: 0))
@@ -52,6 +56,9 @@ public class PickFlavorViewController: UIViewController {
           [weak self] response in
       
           guard let strongSelf = self else { return }
+        
+          // hide HUD after GET request downloads
+          strongSelf.hideLoadingHUD()
         
           // verify response
           guard response.result.isSuccess,
@@ -66,6 +73,15 @@ public class PickFlavorViewController: UIViewController {
         strongSelf.collectionView.reloadData()
         strongSelf.selectFirstFlavor()
     }
+  }
+  
+  private func showLoadingHUD() {
+    let hud = MBProgressHUD.showAdded(to: contentView, animated: true)
+    hud.label.text = "Loading..."
+  }
+  
+  private func hideLoadingHUD() {
+    MBProgressHUD.hide(for: contentView, animated: true)
   }
 
   fileprivate func selectFirstFlavor() {

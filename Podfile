@@ -6,5 +6,6 @@ target 'IceCreamShop' do
 
   # Pods for IceCreamShop
   pod 'Alamofire', '4.4.0'
+  pod 'MBProgressHUD', '~> 1.0'
 
 end
